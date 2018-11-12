@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Media;
 using System.Net;
 using System.Text;
 using System.Windows.Forms;
@@ -10,16 +11,29 @@ namespace Fire_Room
     {
         private string permanante;
         private string username = "Anonymous";
-        private int original;
+        private SoundPlayer SP;
+        private string completevalue;
 
         public Form1()
         {
             InitializeComponent();
+            SP = new SoundPlayer("ding.wav");
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            original = 0;
+            string URL = "https://testing-firebase-60b9b.firebaseio.com/.json";
+            HttpWebRequest request1 = (HttpWebRequest)WebRequest.Create(URL);
+            request1.ContentType = "application/json: charset-utf-8";
+            HttpWebResponse response1 = request1.GetResponse() as HttpWebResponse;
+            Stream responsestream = response1.GetResponseStream();
+            StreamReader Read = new StreamReader(responsestream, Encoding.UTF8);
+            var output = Read.ReadToEnd();
+            string outphrase = output;
+            string[] outie = outphrase.Split('"');
+
+            permanante = outie[7];
+            label2.Text = "Connected to Firebase Database";
         }
 
         public void sendMessage(object sender)
@@ -27,7 +41,7 @@ namespace Fire_Room
             DateTime date = DateTime.Now;
             string sdate = date.ToString("yyyy:MM:dd");
             string stime = date.ToString("HH:mm:ss");
-            string completevalue = username + ": " + textBox1.Text.ToString();
+            completevalue = username + ": " + textBox1.Text.ToString();
 
             var json = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
@@ -72,21 +86,39 @@ namespace Fire_Room
             {
                 permanante = outie[7];
                 listBox1.Items.Add(permanante);
+                if (permanante == completevalue)
+                {
+                    Console.Write("Same value");
+                }
+                else
+                {
+                    if (checkBox1.Checked == true)
+                    {
+                        SP.Play();
+                    }
+                    else
+                    {
+                        Console.Write("No Sound");
+                    }
+                }
             }
         }
+        private void setNickname(object sender)
+        {
+            if (textBox2.Text != "")
+            {
+                username = textBox2.Text;
+                label1.Text = "Currently known as: " + username;
+            }
+            else
+            {
+                MessageBox.Show("Please put in a valid username");
+            }
 
+        }
         private void button2_Click(object sender, EventArgs e)
         {
-            username = textBox2.Text;
-            label1.Text = "Currently known as: " + username;
-        }
-
-        private void textBox1_KeyUp(object sender, KeyEventArgs e, Keys keyData)
-        {
-            if (keyData == Keys.Enter)
-            {
-                sendMessage(sender);
-            }
+            setNickname(sender);
         }
 
         private void textBox1_KeyDown(object sender, KeyEventArgs e)
@@ -94,6 +126,14 @@ namespace Fire_Room
             if (e.KeyData == Keys.Enter)
             {
                 sendMessage(sender);
+            }
+        }
+
+        private void textBox2_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                setNickname(sender);
             }
         }
     }

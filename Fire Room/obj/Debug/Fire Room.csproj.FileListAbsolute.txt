@@ -24,3 +24,4 @@ c:\users\ryan\documents\visual studio 2012\Projects\Fire Room\Fire Room\obj\Debu
 c:\users\ryan\documents\visual studio 2012\Projects\Fire Room\Fire Room\obj\Debug\Fire Room.csproj.GenerateResource.Cache
 c:\users\ryan\documents\visual studio 2012\Projects\Fire Room\Fire Room\obj\Debug\Fire Room.exe
 c:\users\ryan\documents\visual studio 2012\Projects\Fire Room\Fire Room\obj\Debug\Fire Room.pdb
+C:\Users\Ryan\documents\visual studio 2012\Projects\Fire Room\Fire Room\bin\Debug\MaterialSkin.dll
